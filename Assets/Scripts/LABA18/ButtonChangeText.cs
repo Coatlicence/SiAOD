@@ -11,6 +11,7 @@ public class ButtonChangeText : MonoBehaviour
     public void Change()
     {
         _ButtonChangePrior.UpdateTextFromText(_ElementIndex);
+        _ButtonChangePrior.text = this;
     }
 
     public void SetIndex(int i)
@@ -19,5 +20,24 @@ public class ButtonChangeText : MonoBehaviour
             return;
         
         _ElementIndex = i;
+
+        UpdateText();
+
+        //Change();
     }
+
+    public void UpdateText()
+    {
+        if (_ElementIndex < 0) return;
+
+        var text = transform.GetComponentInChildren<TMP_Text>();
+
+        var val = ManagerLab18._Arr[_ElementIndex].ToString();
+
+        if (val == "0") val = "";
+
+        text.text = val;
+    }
+
+
 }

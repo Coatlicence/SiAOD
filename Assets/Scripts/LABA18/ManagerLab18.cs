@@ -9,16 +9,7 @@ public class ManagerLab18 : MonoBehaviour
     public static readonly int[] _Arr = new int[_MaxSize];
 
     [SerializeField] private GameObject Array;
-
     [SerializeField] private GameObject Tree;
-
-    struct TreeElement
-    {
-        ButtonChangeText left;
-        ButtonChangeText right;
-    }
-
-    TreeElement root = new TreeElement();
 
     public void CreateArray()
     {
@@ -29,7 +20,6 @@ public class ManagerLab18 : MonoBehaviour
             var el = Array.transform.GetChild(i).GetComponent<ButtonChangeText>();
 
             el.SetIndex(i);
-            el.Change();
         }
 
         Print();
@@ -37,7 +27,35 @@ public class ManagerLab18 : MonoBehaviour
 
     private void Print()
     {
-
+        int first_pos = _Arr.Length / 2;
+        int col = first_pos;
+        int row = 0;
+        int elements_in_row = 1;
+        for (int i = 0; i < _Arr.Length; i++)
+        {
+            if (_Arr[i] == 0)
+            {
+                var el = Tree.transform.GetChild(row).GetChild(col).GetComponent<ButtonChangeText>();
+                el.SetIndex(-1);
+                el.UpdateText();
+            }
+            else {
+                var el = Tree.transform.GetChild(row).GetChild(col).GetComponent<ButtonChangeText>();
+                el.SetIndex(col);
+                el.UpdateText();
+            }
+            int step = first_pos * 2;
+            if (col != first_pos) col += step;
+            else col = first_pos;
+            elements_in_row--;
+            if (elements_in_row == 0)
+            {
+                row++;
+                first_pos = _Arr.Length / (int)System.Math.Pow(2, row + 1) + 1;
+                col = first_pos - 1;
+                elements_in_row = (int)System.Math.Pow(2, row);
+            }
+        }
     }
 
     public void Clear()
@@ -59,4 +77,6 @@ public class ManagerLab18 : MonoBehaviour
     {
         _Arr[i] = val;
     }
+
+
 }

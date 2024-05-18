@@ -10,6 +10,7 @@ public class Changer : MonoBehaviour
     public TMP_InputField _To;
 
     int _Index;
+    public ButtonChangeText text;
 
     public void Change()
     {
@@ -21,16 +22,21 @@ public class Changer : MonoBehaviour
 
             UpdateTextFromText(_Index);
 
+            text.UpdateText();
         }
     }
 
     public void UpdateTextFromText(int i)
     {
-        if (i > ManagerLab18._MaxSize)
-            throw new System.Exception();
+        if (i > ManagerLab18._MaxSize || i < 0)
+            return;
 
         _Index = i;
 
-        _From.text = ManagerLab18._Arr[_Index].ToString();
+        var val = ManagerLab18._Arr[_Index].ToString();
+
+        if (val == "0") val = "";
+
+        _From.text = val;
     }
 }

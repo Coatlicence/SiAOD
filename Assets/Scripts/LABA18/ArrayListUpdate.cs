@@ -7,6 +7,10 @@ using TMPro;
 public class ArrayListUpdate : MonoBehaviour
 {
     [SerializeField] GameObject content;
+    [SerializeField] GameObject tree;
+
+
+    int[] _Arr = ManagerLab18._Arr;
 
     public void UpdateList()
     {
@@ -19,8 +23,14 @@ public class ArrayListUpdate : MonoBehaviour
             text.text = ManagerLab18._Arr[i].ToString();
 
             elementIndex.SetIndex(i);
-
-            if (text.text == "0") text.text = "";
         }
+
+        for (int i = 0; i < tree.transform.childCount; i++)
+            for (int j = 0; j < tree.transform.GetChild(i).childCount; j++)
+            {
+                var el = tree.transform.GetChild(i).GetChild(j).GetComponent<ButtonChangeText>();
+                el.UpdateText();
+
+            }
     }
 }
