@@ -19,6 +19,8 @@ public class Changer : MonoBehaviour
         if (int.TryParse(_To.text, out int num))
         {
             ManagerLab18.Set(_Index, num);
+            ManagerLab18.Up(_Index);
+            ManagerLab18.Down(_Index);
 
             UpdateTextFromText(_Index);
 

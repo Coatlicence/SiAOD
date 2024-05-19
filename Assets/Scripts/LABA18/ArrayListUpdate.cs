@@ -8,10 +8,11 @@ public class ArrayListUpdate : MonoBehaviour
 {
     [SerializeField] GameObject content;
     [SerializeField] GameObject tree;
+    [SerializeField] GameObject rezult;
 
 
     int[] _Arr = ManagerLab18._Arr;
-
+    int[] _Rezult = ManagerLab18._Rezults;
     public void UpdateList()
     {
         for (int i = 0; i < content.transform.childCount; i++) 
@@ -32,5 +33,15 @@ public class ArrayListUpdate : MonoBehaviour
                 el.UpdateText();
 
             }
+
+        for(int i = 0; i < rezult.transform.childCount; i++)
+        {
+            var text = rezult.transform.GetChild(i).GetComponentInChildren<TMP_Text>();
+
+            var elementIndex = rezult.transform.GetChild(i).GetComponent<ButtonChangeText>();
+
+            text.text = ManagerLab18._Rezults[i].ToString();
+
+        }
     }
 }
