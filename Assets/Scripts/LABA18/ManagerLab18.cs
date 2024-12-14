@@ -1,27 +1,25 @@
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
-using Unity.Burst.Intrinsics;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class ManagerLab18 : MonoBehaviour
 {
     public static readonly int _MaxSize = 15;
 
     public static int[] _Arr = new int[_MaxSize];
-    public static int[] _Rezults = new int[_MaxSize];
+    public static int[] _Results = new int[_MaxSize];
     private static int sizeArray = 0;
-    private static int sizeRezults = 0;
+    private static int sizeResults = 0;
 
     [SerializeField] private GameObject Array;
     [SerializeField] private GameObject Tree;
     [SerializeField] private GameObject Rezults;
     [SerializeField] private TMP_InputField In;
 
+    /// <summary>
+    /// Создает массив и выводит его в дерево
+    /// </summary>
     public void CreateArray()
     {
         Clear();
@@ -39,8 +37,14 @@ public class ManagerLab18 : MonoBehaviour
             el.SetIndex(i);
         }
 
-            Print();
+        Print();
     }
+
+    /// <summary>
+    /// Добавляет значение в массив и выводит их в дерево
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="val"></param>
     private void Add(int pos,int val)
     {
         _Arr[pos] = val;
@@ -66,10 +70,15 @@ public class ManagerLab18 : MonoBehaviour
                 el.SetIndex(i);
                 el.UpdateText();
             }
-            int step = first_pos * 2;
-            if (col != first_pos) col += step;
-            else col = first_pos;
+            int step = first_pos * 2; 
+            
+            if (col != first_pos) 
+                col += step;
+            else 
+                col = first_pos;
+            
             elements_in_row--;
+            
             if (elements_in_row == 0)
             {
                 row++;
@@ -83,15 +92,17 @@ public class ManagerLab18 : MonoBehaviour
 
     public void Clear()
     {
-        sizeRezults = 0;
+        if (_Arr.Length == 0) EditorUtility.DisplayDialog("Массив пуст", "Сначала заполните массив", "ок");
+
+        sizeResults = 0;
         sizeArray = 0;
         for (int i = 0; i < _Arr.Length; i++)
         {
             _Arr[i] = 0;
         }
-        for (int i = 0; i < _Rezults.Length; i++)
+        for (int i = 0; i < _Results.Length; i++)
         {
-            _Rezults[i] = 0;
+            _Results[i] = 0;
         }
     }
 
@@ -112,9 +123,7 @@ public class ManagerLab18 : MonoBehaviour
         int i = indexOfElement;
         while (_Arr[i] > _Arr[(i - 1) / 2])
         {
-            int tmp = _Arr[(i - 1) / 2];
-            _Arr[(i - 1) / 2] = _Arr[i];
-            _Arr[i] = tmp;
+            (_Arr[i], _Arr[(i - 1) / 2]) = (_Arr[(i - 1) / 2], _Arr[i]);
             i = (i - 1) / 2;
         }
     }
@@ -123,15 +132,15 @@ public class ManagerLab18 : MonoBehaviour
 
         if (sizeArray == 0)
         {
-            Debug.Log("������ ����");
+            EditorUtility.DisplayDialog("sizeArray == 0", "Сначала заполните массив", "ок");
             return;
         }
-        if (sizeRezults == _MaxSize)
+        if (sizeResults == _MaxSize)
         {
-            Debug.Log("������-��������� �����");
+            EditorUtility.DisplayDialog("sizeResults == _MaxSize", "Массив результатов полон, необходимо очистить данные", "ок");
             return;
         }
-        _Rezults[sizeRezults++] = _Arr[0];
+        _Results[sizeResults++] = _Arr[0];
         Delete(0);
         Print();
     }
@@ -143,14 +152,29 @@ public class ManagerLab18 : MonoBehaviour
         sizeArray--;
         return i;
     }
+
     public static void Down(int index)
     {
         while (2 * index + 1 <= _MaxSize)
         {
+            //Debug.Log($"child = {2 * index + 1}");
 
-            int j = 2 * index + 1;
-            if (j < _MaxSize && _Arr[j] < _Arr[j + 1]) j++;
-            if ((_Arr[index] >= _Arr[j])) break;
+            int j = 2 * index + 1; // 15
+            Debug.Log($"child = {j}"); // 15
+
+
+            if (j < _MaxSize && _Arr[j] < _Arr[j + 1]) // тут выходит
+                j++;
+
+            Debug.Log($"child = {2 * index + 1}"); // 15
+            Debug.Log($"par = {index}");
+
+            if (j >= _MaxSize)
+                break;
+
+            if (_Arr[index] >= _Arr[j]) // тут ошибка
+                break;
+
             (_Arr[index], _Arr[j]) = (_Arr[j], _Arr[index]);
             index = j;
         }
@@ -160,7 +184,7 @@ public class ManagerLab18 : MonoBehaviour
         
         if (sizeArray == _MaxSize)
         {
-            Debug.Log("������ �����");
+            EditorUtility.DisplayDialog("sizeArray == _MaxSize", "Мевозможно вставить новое число, очистите данные", "ок");
             return;
         }
         Add(sizeArray, int.Parse(In.text));

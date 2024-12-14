@@ -12,7 +12,7 @@ public class ArrayListUpdate : MonoBehaviour
 
 
     int[] _Arr = ManagerLab18._Arr;
-    int[] _Rezult = ManagerLab18._Rezults;
+    int[] _Rezult = ManagerLab18._Results;
     public void UpdateList()
     {
         for (int i = 0; i < content.transform.childCount; i++) 
@@ -40,7 +40,7 @@ public class ArrayListUpdate : MonoBehaviour
 
             var elementIndex = rezult.transform.GetChild(i).GetComponent<ButtonChangeText>();
 
-            text.text = ManagerLab18._Rezults[i].ToString();
+            text.text = ManagerLab18._Results[i].ToString();
 
         }
     }

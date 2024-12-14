@@ -9,42 +9,46 @@ public class HeapSort : SortScript
     {
         int length = array.Length;
         ulong comparisons = 0;
-        ulong reinstallation = 0;
+        ulong swaps = 0;
         var sw = new Stopwatch();
+
         sw.Start();
-        for (int i = (length / 2 - 1); i >= 0; i--)
+        for (int i = length / 2 - 1; i >= 0; i--)
         {
-            func_res tmp = fixDown(array, length, i);
+            func_res tmp = FixDown(array, length, i);
             comparisons += tmp.comparisons;
-            reinstallation += tmp.swaps;
+            swaps += tmp.swaps;
         }
         for (int i = length - 1; i > 0; i--)
         {
             (array[0], array[i]) = (array[i], array[0]);
-            func_res tmp = fixDown(array, i, 0);
+            func_res tmp = FixDown(array, i, 0);
             comparisons += tmp.comparisons;
-            reinstallation += tmp.swaps;
+            swaps += tmp.swaps;
         }
 
         sw.Stop();
-        return new func_res(sw.ElapsedMilliseconds, comparisons, reinstallation);
+        return new func_res(sw.ElapsedMilliseconds, comparisons, swaps);
 
     }
 
-    static func_res fixDown(int[] array, int length, int i)
+    static func_res FixDown(int[] array, int length, int i)
     {
         ulong comparisons = 0;
-        ulong reinstallation = 0;
+        ulong swaps = 0;
         while (2 * i + 1 < length)
         {
             int j = 2 * i + 1;
-            if (j + 1 < length && array[j] < array[j + 1]) j++;
+            if (j + 1 < length && array[j] < array[j + 1]) 
+                j++;
+
             comparisons += 2;
-            if ((array[i] >= array[j])) break;
+            
+            if (array[i] >= array[j]) break;
             (array[i], array[j]) = (array[j], array[i]);
-            reinstallation++;
+            swaps++;
             i = j;
         }
-        return new func_res(0, comparisons, reinstallation);
+        return new func_res(0, comparisons, swaps);
     }
 }
